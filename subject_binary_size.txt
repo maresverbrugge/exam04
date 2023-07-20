@@ -1,0 +1,16 @@
+Implement a function that culculates the size of a binary tree,
+that is to say, the total number of nodes it contains.
+
+The function should be declared as follows:
+int size_binary_tree(t_btree *root, int value);
+
+You have to use the ft_btree.h file, which will ONLY contain:
+
+typedef struct  s_btree
+{
+    int     value;
+    struct s_btree  *left;
+    struct s_btree  *right;
+}               t_btree;
+
+if the root node is NULL, return 0.
