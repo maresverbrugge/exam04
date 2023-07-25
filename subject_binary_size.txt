@@ -2,7 +2,7 @@ Implement a function that culculates the size of a binary tree,
 that is to say, the total number of nodes it contains.
 
 The function should be declared as follows:
-int size_binary_tree(t_btree *root, int value);
+int size_binary_tree(t_btree *root);
 
 You have to use the ft_btree.h file, which will ONLY contain:
 

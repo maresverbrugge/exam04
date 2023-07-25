@@ -2,30 +2,26 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int size_binary_tree(t_btree *root)
+int height_binary_tree(t_btree *root)
 {
-    int count_nodes;
+    int height_left;
+    int height_right;
     
-    count_nodes = 0;
+    height_left = 0;
+    height_right = 0;
     if (root == NULL)
         return (0);
     while (root)
     {
         printf("root->value = %d\n", root->value);
-        count_nodes += size_binary_tree(root->left);
-        count_nodes += size_binary_tree(root->right);
-        return (count_nodes + 1);
+        height_left += height_binary_tree(root->left);
+        height_right += height_binary_tree(root->right);
+        if (height_left >= height_right)
+            return (height_left + 1);
+        return (height_right + 1);
     }
-    return (count_nodes);
+    return (-1);
 }
-
-// int size_binary_tree(t_btree *root)
-// {
-//     if (root == NULL)
-//         return (0);
-//     else
-//         return (size_binary_tree(root->right) + 1 + size_binary_tree(root->left));
-// }
 
 int main(void)
 {
@@ -92,6 +88,6 @@ int main(void)
     root->right->right->right->right = NULL;
     root->right->right->right->left = NULL;
 
-    printf("size of tree = %d\n", size_binary_tree(root));
+    printf("height of tree of nodes = %d\n", height_binary_tree(root));
     return (0);
 }
