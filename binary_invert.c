@@ -2,27 +2,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int height_binary_tree(t_btree *root)
-{
-    int height_left;
-    int height_right;
-    
-    height_left = 0;
-    height_right = 0;
-    if (root == NULL)
-        return (0);
-    while (root)
-    {
-        printf("root->value = %d\n", root->value);
-        height_left += height_binary_tree(root->left);
-        height_right += height_binary_tree(root->right);
-        if (height_left >= height_right)
-            return (height_left + 1);
-        return (height_right + 1);
-    }
-    return (-1);
-}
-
 t_btree *new_node(int value)
 {
     t_btree *new_node = malloc(sizeof(t_btree));
@@ -34,7 +13,7 @@ t_btree *new_node(int value)
 
 t_btree *make_tree1()
 {
-    t_btree *tree; /// height = 4
+    t_btree *tree; /// size = 10, height = 4
 
 	tree = new_node(11);
 	tree->left = new_node(7);
@@ -51,7 +30,7 @@ t_btree *make_tree1()
 
 t_btree *make_tree2()
 {
-    t_btree *tree; // height = 4
+    t_btree *tree; // size = 7, height = 4
 
 	tree = new_node(50);
 	tree->left = new_node(24);
@@ -81,6 +60,40 @@ t_btree *make_tree3()
     return (tree);
 }
 
+void print_bst(t_btree* root, int level, char *prefix)
+{
+    if (root == NULL)
+        return ;
+    int spaces = 4;
+    char indent[spaces + 1];
+    for (int i = 0; i < spaces; i++) {
+        indent[i] = ' ';
+    }
+    indent[spaces] = '\0';
+
+    if (level == 0)
+        printf("%s%d\n", prefix, root->value);
+    else
+        printf("%*s|__ %d\n", spaces * level, indent, root->value);
+    char left_prefix[6] = "L--- ";
+    char right_prefix[6] = "R--- ";
+    print_bst(root->left, level + 1, left_prefix);
+    print_bst(root->right, level + 1, right_prefix);
+}
+
+int invert_binary_tree(t_btree *root)
+{
+    t_btree *tmp;
+    
+    if (root == NULL)
+        return (0);
+    invert_binary_tree(root->right);
+    invert_binary_tree(root->left);
+    tmp = root->left;
+    root->left = root->right;
+    root->right = tmp;
+    return (1);
+}
 int main(void)
 {
 	t_btree *tree1;
@@ -91,9 +104,15 @@ int main(void)
 	tree2 = make_tree2();
 	tree3 = make_tree3();
 
-    printf("height of tree1 = %d\n\n", height_binary_tree(tree1));
-    printf("height of tree2 = %d\n\n", height_binary_tree(tree2));
-    printf("height of tree3 = %d\n", height_binary_tree(tree3));
+    print_bst(tree1, 0, "Root: ");
+    printf("\n\n\n\n");
+    if (invert_binary_tree(tree1) != 0)
+        print_bst(tree1, 0, "Root: ");
+    else
+        printf("tree is empty\n");
 
+    // printf("size of tree1 = %d\n\n", size_binary_tree(tree1));
+    // printf("size of tree2 = %d\n\n", size_binary_tree(tree2));
+    // printf("size of tree3 = %d\n", size_binary_tree(tree3));
     return (0);
 }

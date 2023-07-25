@@ -4,4 +4,3 @@ typedef struct  s_btree
     struct s_btree  *left;
     struct s_btree  *right;
 }               t_btree;
-

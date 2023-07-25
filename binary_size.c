@@ -9,14 +9,9 @@ int size_binary_tree(t_btree *root)
     count_nodes = 0;
     if (root == NULL)
         return (0);
-    while (root)
-    {
-        printf("root->value = %d\n", root->value);
-        count_nodes += size_binary_tree(root->left);
-        count_nodes += size_binary_tree(root->right);
-        return (count_nodes + 1);
-    }
-    return (count_nodes);
+    printf("root->value = %d\n", root->value);
+    count_nodes += size_binary_tree(root->right) + size_binary_tree(root->left);
+    return (count_nodes + 1); // + 1 is "highest" root node!!!
 }
 
 // int size_binary_tree(t_btree *root)
@@ -27,71 +22,76 @@ int size_binary_tree(t_btree *root)
 //         return (size_binary_tree(root->right) + 1 + size_binary_tree(root->left));
 // }
 
+t_btree *new_node(int value)
+{
+    t_btree *new_node = malloc(sizeof(t_btree));
+    new_node->value = value;
+    new_node->left = NULL;
+    new_node->right = NULL;
+    return (new_node);
+}
+
+t_btree *make_tree1()
+{
+    t_btree *tree; /// size = 10, height = 4
+
+	tree = new_node(11);
+	tree->left = new_node(7);
+	tree->left->left = new_node(3);
+	tree->left->right = new_node(9);
+	tree->left->left->left = new_node(1);
+	tree->left->left->right = new_node(5);
+	tree->right = new_node(17);
+	tree->right->right = new_node(19);
+	tree->right->left = new_node(16);
+	tree->right->right->right = new_node(20);
+    return (tree);
+}
+
+t_btree *make_tree2()
+{
+    t_btree *tree; // size = 7, height = 4
+
+	tree = new_node(50);
+	tree->left = new_node(24);
+	tree->left->right = new_node(45);
+	tree->left->right->left = new_node(25);
+	tree->right = new_node(59);
+	tree->right->right = new_node(84);
+	tree->right->right->left = new_node(74);
+    return (tree);
+}
+
+t_btree *make_tree3()
+{
+    t_btree *tree; // size = 11, height = 6
+
+	tree = new_node(30);
+	tree->left = new_node(24);
+	tree->left->left = new_node(11);
+	tree->left->left->right = new_node(13);
+	tree->left->right = new_node(26);
+	tree->left->right->right = new_node(27);
+	tree->left->right->right->right = new_node(28);
+	tree->left->right->right->right->right = new_node(29);
+	tree->right = new_node(40);
+	tree->right->right = new_node(58);
+	tree->right->right->left = new_node(48);
+    return (tree);
+}
+
 int main(void)
 {
-    // make tree
-    t_btree *root;
+	t_btree *tree1;
+	t_btree *tree2;
+	t_btree *tree3;
 
-    // root = malloc(sizeof(t_btree));
-    // root->value = 50;
+	tree1 = make_tree1();
+	tree2 = make_tree2();
+	tree3 = make_tree3();
 
-    // root->left = malloc(sizeof(t_btree));
-    // root->left->value = 24;
-    // root->left->left = NULL;
-    // root->left->right = malloc(sizeof(t_btree));
-    // root->left->right->value = 45;
-    // root->left->right->right = NULL;
-    // root->left->right->left = malloc(sizeof(t_btree));
-    // root->left->right->left->value = 25;
-    // root->left->right->left->left = NULL;
-    // root->left->right->left->right = NULL;
-
-    // root->right = malloc(sizeof(t_btree));
-    // root->right->value = 59;
-    // root->right->left = NULL;
-    // root->right->right = malloc(sizeof(t_btree));
-    // root->right->right->value = 84;
-    // root->right->right->right = NULL;
-    // root->right->right->left = malloc(sizeof(t_btree));
-    // root->right->right->left->value = 74;
-    // root->right->right->left->left = NULL;
-    // root->right->right->left->right = NULL;
-
-    // ---------------------------
-    root = malloc(sizeof(t_btree));
-    root->value = 11;
-
-    root->left = malloc(sizeof(t_btree));
-    root->left->value = 7;
-    root->left->right = malloc(sizeof(t_btree));
-    root->left->right->value = 9;
-    root->left->right->left = NULL;
-    root->left->right->right = NULL;
-    root->left->left = malloc(sizeof(t_btree));
-    root->left->left->value = 3;
-    root->left->left->left = malloc(sizeof(t_btree));
-    root->left->left->left->value = 1;
-    root->left->left->left->left = NULL;
-    root->left->left->left->right = NULL;
-    root->left->left->right = malloc(sizeof(t_btree));
-    root->left->left->right->value = 5;
-    root->left->left->right->left = NULL;
-    root->left->left->right->right = NULL;
-
-    root->right = malloc(sizeof(t_btree));
-    root->right->value = 17;
-    root->right->left = malloc(sizeof(t_btree));
-    root->right->left->value = 16;
-    root->right->left->right = NULL;
-    root->right->left->left = NULL;
-    root->right->right = malloc(sizeof(t_btree));
-    root->right->right->value = 19;
-    root->right->right->left = NULL;
-    root->right->right->right = malloc(sizeof(t_btree));
-    root->right->right->right->value = 20;
-    root->right->right->right->right = NULL;
-    root->right->right->right->left = NULL;
-
-    printf("size of tree = %d\n", size_binary_tree(root));
+    printf("size of tree1 = %d\n\n", size_binary_tree(tree1));
+    printf("size of tree2 = %d\n\n", size_binary_tree(tree2));
+    printf("size of tree3 = %d\n", size_binary_tree(tree3));
     return (0);
 }
