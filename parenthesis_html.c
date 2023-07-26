@@ -1,15 +1,8 @@
 #include <stdbool.h> // for bool
 #include <unistd.h> // for write
-#include <stdio.h> // for printf
 #include <stdlib.h> // for malloc
+#include <stdio.h> // for printf
 
-// bool matches(char *first, char *second)
-// {
-// 	if ((first == '<' && second == '>')
-// 		|| (first == '{' && second == '}'))
-// 		return (true);
-// 	return (false);
-// }   
 char	*ft_substr(char *s, int start, int end)
 {
 	char    *str;
@@ -30,18 +23,25 @@ char	*ft_substr(char *s, int start, int end)
 	return (str);
 }
 
-bool	is_closing(const char *s1, const char *s2)
+char *make_match(char *opening)
 {
-	int	i;
+	char *match = malloc((1024) * sizeof(char));
+	int i = 0;
 
-	i = 0;
-	while (s1[i] != '\0' && s2[i] != '\0')
+	match[i] = '<';
+	i++;
+	match[i] = '/';
+	i++;
+	while (opening[i] != '>')
 	{
-		if (s1[i] != s2[i])
-			return (false);
+		match[i] = opening[i + 1];
 		i++;
 	}
-	return (true);
+	match[i] = opening[i];
+	match[i + 1] = '\0';
+	printf("opening in makematch = %s\n", opening);
+	printf("match in makematch = %s\n\n", match);
+	return (match);
 }
 
 bool	is_same(const char *s1, const char *s2)
@@ -58,87 +58,16 @@ bool	is_same(const char *s1, const char *s2)
 	return (true);
 }
 
-void print_2d_array(char **array, char *str)
+bool matches(char *opening, char *closing)
 {
-    int i = 0;
-    printf("%s !!!\n", str);
-    while (array[i] != NULL)
-    {
-        printf("[%i] = %s\n", i, array[i]);
-        i++;
-    }
-    printf("\n\n");
-}
-// bool    is_right_closing(char **blocks, char **matching_blocks)
-// {
-//     int block_index = 0;
-    
-//     if (ft_is_pair(blocks[block_index], matching_blocks[block_index]) == false)
-//     {
-//         printf("its opening\n");
-//     }
-//     else
-//     {
-//         printf("its closing\n");
-//     }
-//     printf("\n");
-// }
+	char *match = NULL;
 
-char **check_closing(char **blocks, char **matching_blocks)
-{
-    char **closing_blocks = malloc((1024) * sizeof(char *));
-    int index = 0;
-    int closing_index = 0;
-    while(blocks[index])
-    {
-        // printf("blocks[index] = %s\n", blocks[index]);
-        // printf("matching_blocks[index] = %s\n", matching_blocks[index]);
-        if (is_closing(blocks[index], matching_blocks[index]) == true)
-        {
-            // printf("its closing\n");
-            closing_blocks[closing_index] = blocks[index];
-            closing_index++;
-        }
-        // printf("\n");
-        index++;
-    }
-    return (closing_blocks);
-}
-
-int check_opening(char **blocks, char **matching_blocks, char **opening_blocks)
-{
-    int index = 0;
-    int opening_index = 0;
-    while(blocks[index])
-    {
-        // printf("blocks[index] = %s\n", blocks[index]);
-        // printf("matching_blocks[index] = %s\n", matching_blocks[index]);
-        if (is_closing(blocks[index], matching_blocks[index]) == false)
-        {
-            // printf("its opening\n");
-            opening_blocks[opening_index] = blocks[index];
-            opening_index++;
-        }
-        // printf("\n");
-        index++;
-    }
-    return (opening_index);
-}
-
-bool check_stacks(int size, char **blocks, char **matching_blocks, char **opening_blocks, char **closing_blocks)
-{
-    int i = 0;
-    
-    while (i < size)
-    {
-        printf("HIER!!!\n");
-        printf("matching_blocks[i] = %s\n", matching_blocks[i]);
-        printf("closing_blocks[i] = %s\n", closing_blocks[i]);
-        if (is_same(matching_blocks[i], closing_blocks[i]) == false)
-            return (false);
-        i++;
-    }
-    return (true);
+	printf("opening in matches = %s\n", opening);
+	printf("closing in matches = %s\n", closing);
+	match = make_match(opening);
+	if (is_same(closing, match) == true)
+		return (true);
+	return (false);
 }
 
 bool	check_parenthesis(char *str)
@@ -146,62 +75,46 @@ bool	check_parenthesis(char *str)
 	int	i = 0;
     int start = 0;
     int end = 0;
-    int block_index = 0;
-    char **blocks = malloc((1024) * sizeof(char *));
-    char *matching_block = malloc(1024 * sizeof (char));
     char **opening_blocks = malloc((1024) * sizeof(char *));
-    char **matching_blocks = malloc((1024) * sizeof(char *));
-    char **closing_blocks; // = malloc((1024) * sizeof(char *));
+	int	stack_size = 0;
 
 	while (str[i])
 	{
-        if (str[i] == '<') // if opening bracket // && str[i + 1] != '/'
+		if (str[i] == '<' && str[i + 1] != '/') // if opening bracket
 		{
-            int j = 0;
-            matching_block[j] = str[i];
             start = i;
-            j++;
             i++;
-            if (str[i] != '/')
-            {
-                matching_block[j] = '/';
-                j++;
-            }
             while (str[i] != '>')
             {
-                matching_block[j] = str[i];
-                j++;
                 i++;
             }
-            matching_block[j] = str[i];
-            matching_block[j + 1] = '\0';
-            end = i + 1;
-            blocks[block_index] = ft_substr(str, start, end);
-            matching_blocks[block_index] = ft_substr(matching_block, 0, j + 1);
-            printf("blocks[%d] = %s\n", block_index, blocks[block_index]);
-            printf("matching_block[%d] = %s\n\n", block_index, matching_blocks[block_index]);
-            block_index++;
-        }
+            end = i + 1; // + 1?
+            stack_size++; // increment stack size
+			opening_blocks[stack_size] = ft_substr(str, start, end); // push opening bracket to stack
+		}
+		if (str[i] == '<'  && str[i + 1] == '/') // if closing bracket
+		{
+			start = i;
+            i++;
+            while (str[i] != '>')
+            {
+                i++;
+            }
+            end = i + 1; // + 1?
+			if (matches(opening_blocks[stack_size], ft_substr(str, start, end)) == false) // check if closing bracket matches opening bracket
+				return (false);
+			stack_size--; // if so: fake pop opening bracket from stack
+		}
 		i++;
 	}
-    printf("\n");
-    print_2d_array(blocks, "blocks");
-    print_2d_array(matching_blocks, "matching_blocks");
-    
-    int size = check_opening(blocks, matching_blocks, opening_blocks);
-    printf("amount_of_opening_blocks = %d\n", size);
-    print_2d_array(opening_blocks, "opening_blocks");
-
-    closing_blocks = check_closing(blocks, matching_blocks);
-    print_2d_array(closing_blocks, "closing_blocks");
-
-    if (check_stacks(size, blocks, matching_blocks, opening_blocks, closing_blocks) == true) // validate stacks
-	    return (true); //  -> only matching pairs found
+    if (stack_size == 0) // validate stack is empty -> only matching pairs found
+	    return (true);
     return (false);
 }
 
 int main(int argc, char **argv)
 {
+	
 	int i;
 	
 	i = 1;

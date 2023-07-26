@@ -84,7 +84,7 @@ void print_bst(t_btree* root, int level, char *prefix)
 int invert_binary_tree(t_btree *root)
 {
     t_btree *tmp;
-    
+
     if (root == NULL)
         return (0);
     invert_binary_tree(root->right);

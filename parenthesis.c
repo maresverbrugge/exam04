@@ -12,12 +12,10 @@ bool matches(char first, char second)
 
 bool	check_parenthesis(char *str)
 {
-	int	i;
-	int	stack_size;
+	int	i = 0;
+	int	stack_size = 0;
 	int	stack[1024];
 
-	i = 0;
-	stack_size = 0;
 	while (str[i])
 	{
 		if (str[i] == '(' || str[i] == '[' || str[i] == '{') // if opening bracket

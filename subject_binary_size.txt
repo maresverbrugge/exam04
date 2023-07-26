@@ -15,6 +15,7 @@ typedef struct  s_btree
 
 if the root node is NULL, return 0.
 
+
 Variant:
 Waar je html syntax moest checken.
 Of elke openend blok ook daadwerkelijk
