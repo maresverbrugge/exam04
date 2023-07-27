@@ -14,11 +14,3 @@ typedef struct  s_btree
 }               t_btree;
 
 if the root node is NULL, return 0.
-
-
-Variant:
-Waar je html syntax moest checken.
-Of elke openend blok ook daadwerkelijk
-goed gesloten wordt met eenzelfde sluitend blok.
-<b><blue></blue></b> = OK
-<b><blue></b></blue> = Error

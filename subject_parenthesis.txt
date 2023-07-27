@@ -29,3 +29,19 @@ OK$
 $> ./brackets | cat -e
 $
 $>
+
+
+
+HTML variant:
+Waar je html tags moet checken.
+Of elk opening tag ook daadwerkelijk
+goed gesloten wordt met eenzelfde closing tag.
+Zoals dit:
+<b><blue></blue></b> = OK
+<b><blue></b></blue> = Error
+
+2 extra uitdagingen:
+- Tags kunnen er ook zo uit zien:
+<blue attribute="bladiebla"> 
+- IMG tags hoeven niet gesloten te worden!
+<img blue bla>
